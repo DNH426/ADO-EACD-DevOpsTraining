@@ -14,7 +14,7 @@ default     = "wildrydes"
 
 variable "env" {
 description = "deployment environment"
-default     = "dev"
+default     = "dnh"
 }
 
 variable "region" {
