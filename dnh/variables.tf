@@ -4,21 +4,6 @@ module "build_wildRydes" {
   app_name = var.app_name
   env      = var.env
   region   = var.region
-}
 
-# globals
-variable "app_name" {
-  description = "application name - match app repo"
-  default     = "wildrydes"
-}
-
-variable "env" {
-  description = "deployment environment"
-  default     = "dnh"
-}
-
-variable "region" {
-  description = "region to build environment"
-  default     = "us-east-2"
 }
 
