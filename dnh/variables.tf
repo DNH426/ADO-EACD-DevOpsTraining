@@ -11,7 +11,7 @@ module "build_wildRydes" {
   bucket   = "wild-rydes-bucket"
 
   # Lambda Variables
-  lambda_runtimes  = ["nodejs10.x"]
+  # lambda_runtimes  = ["nodejs10.x"]
 
   # API GW
 
