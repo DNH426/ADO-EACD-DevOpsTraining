@@ -1,23 +1,37 @@
+# --------------------------------------------------------
+# Globals
+# --------------------------------------------------------
 module "build_wildRydes" {
-  # globals
-  source   = "../modules"
-  
-  # Global Variables
-  region   = "us-east-2"
-  app_name = "wildRydes"
-  env      = "dnh"
+  # Misc
+  source                        = "../modules"
+  region                        = "us-east-2"
+  app-name                      = "wildRydes"
+  env                           = "dnh"
+  file-type                     = "zip"
 
-  #S3 Bucket names
-  bucket        = "wild-rydes-bucket"
-  lambda_bucket = "wild-rydes-lambda-bucket"
+  # S3 Buckets
+  bucket                        = "dnh-wild-rydes-bucket"
+  lambda-bucket                 = "dnh-wild-rydes-lambda-bucket"
+  index-document                = "index.html"
+  error-document                = "error.html" 
+  function-key                  = "js/config.js"
+  functon-content-type          = "application/javascript"
+  client-function-etag          = "filemd5(../modules/templates/config_for_S3.tpl)"
+  bucket-acl                    = "public-read"
 
-  # Lambda Variables
-  # lambda_runtimes  = ["nodejs10.x"]
+  # Lambda
+  lambda-runtimes               = "nodejs12.x"
+  lambda-function-name          = "dnh-wild-rydes-lambda"
+  lambda-role                   = "dnh-lambda-role"
+  lambda-policy                 = "dnh-wild-rydes-write-access"
+  lambda-source-path            = "../modules/Files_lambda_S3/requestUnicorn.js"
+  lambda-output-path            = "../modules/Files_lambda_S3/dnh-lambda.zip"
+  lambda-handler                = "requestUnicorn.handler"
+    
+  # Cognito
+  cognito-user-pool-name        = "dnh-wild-rydes-pool"
+  cognito-user-pool-client      = "dnh-pool-client"
 
   # API GW
-
-
-  # account_resources_state_bucket = "as-dma-sbx-tfstate"
-  # account_resources_state_file = "dma-shared-resources/sbx/terraform.tfstate"
 }
 

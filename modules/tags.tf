@@ -1,6 +1,9 @@
+# --------------------------------------------------------
+# Global Tags
+# --------------------------------------------------------
 locals { 
     tags = {
-        Application = var.app_name
+        Application = var.app-name
         Environment = var.env
     }
 } 

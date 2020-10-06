@@ -1,33 +1,33 @@
-# Globals
-variable "app_name" {
-}
+# --------------------------------------------------------
+# Global Variables
+# --------------------------------------------------------
+# Misc
+variable "app-name" {}
+variable "env" {}
+variable "region" {}
+variable "file-type" {}
 
-variable "env" {
-}
+# S3
+variable "bucket" {}
+variable "lambda-bucket" {}
+variable "index-document" {}
+variable "error-document" {}
+variable "function-key" {}
+variable "functon-content-type" {}
+variable "client-function-etag" {}
+variable "bucket-acl" {}
 
-variable "region" {
-}
+# Lambda
+variable "lambda-runtimes" {}
+variable "lambda-function-name" {}
+variable "lambda-role" {}
+variable "lambda-policy" {}
+variable "lambda-output-path" {}
+variable "lambda-handler" {}
+variable "lambda-source-path" {}
 
-variable "app_name" {
-  description = "application name - match app repo"
-  default     = "wildrydes"
-}
+# Cognito
+variable "cognito-user-pool-name" {}
+variable "cognito-user-pool-client" {}
 
-variable "env" {
-  description = "deployment environment"
-  default     = "dnh"
-}
-
-variable "region" {
-  description = "region to build environment"
-  default     = "us-east-2"
-}
-
-variable "bucket" {
-  description = "S3 Bucket where the static website is stored"
-  default = "wild-rydes-bucket"
-}
-
-variable "file" {
-  default = "dma-shared-resources/sbx/terraform.tfstate"
-}
+# API Gateway

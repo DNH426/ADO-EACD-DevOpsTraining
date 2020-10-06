@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "wild-rydes-bucket"
+    bucket = "as-dma-sbx-tfstate"
     key    = "wildRydes/sbx/terraform.tfstate"
     region = "us-east-2"
   }
