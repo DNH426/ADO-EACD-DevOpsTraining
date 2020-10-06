@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-# S3 Bucket for static webpage 
+# S3 Bucket for static hosting 
 # --------------------------------------------------------
 resource "aws_s3_bucket" "wild_rydes_s3_tf" {
   bucket  = var.bucket

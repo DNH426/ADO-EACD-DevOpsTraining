@@ -54,10 +54,10 @@ resource "aws_api_gateway_method" "dnh_apigateway_method" {
   }
 } 
 
-# # --------------------------------------------------------
-# # Creates an integration for the API gateway, resource, and the method
-# # This is used for both POST 
-# # --------------------------------------------------------
+# --------------------------------------------------------
+# Creates an integration for the API gateway, resource, and the method
+# This is used for both POST 
+# -------------------------------------------------------
 resource "aws_api_gateway_integration" "dnh_integration" {
   rest_api_id             = aws_api_gateway_rest_api.dnh_wild_rydes_api.id
   resource_id             = aws_api_gateway_resource.dnh_request_ride_resource.id
@@ -67,9 +67,9 @@ resource "aws_api_gateway_integration" "dnh_integration" {
   uri                     = aws_lambda_function.dnh_lambda.invoke_arn
 }
 
-# # -----------------------------------------------------------------------------------------------
-# # This is used to set the response for CORS with appropriate response parameters
-# # -----------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------
+# This is used to set the response for CORS with appropriate response parameters
+# -----------------------------------------------------------------------------------------------
 resource "aws_api_gateway_integration_response" "dnh_integration_response" {
   rest_api_id = aws_api_gateway_rest_api.dnh_wild_rydes_api.id
   resource_id = aws_api_gateway_resource.dnh_request_ride_resource.id
@@ -88,9 +88,9 @@ EOF
   }
 } 
 
-# # --------------------------------------------------------
-# # This is used to set the response for CORS with appropriate response parameters
-# # --------------------------------------------------------
+# --------------------------------------------------------
+# This is used to set the response for CORS with appropriate response parameters
+# --------------------------------------------------------
 resource "aws_api_gateway_method_response" "dnh_method_response" {
   rest_api_id   = aws_api_gateway_rest_api.dnh_wild_rydes_api.id
   resource_id   = aws_api_gateway_resource.dnh_request_ride_resource.id
@@ -98,9 +98,9 @@ resource "aws_api_gateway_method_response" "dnh_method_response" {
   status_code   = "200"
 } 
 
-# # --------------------------------------------------------
-# # This resource is used to provide (by lambda) permissions to the API gateway
-# # --------------------------------------------------------
+# --------------------------------------------------------
+# This resource is used to provide (by lambda) permissions to the API gateway
+# --------------------------------------------------------
 resource "aws_lambda_permission" "dnh_api_lambda_permission" {
   statement_id  = "AllowMyRequestAPIInvoke"
   action        = "lambda:InvokeFunction"
@@ -113,9 +113,9 @@ resource "aws_lambda_permission" "dnh_api_lambda_permission" {
   source_arn =  # "${aws_api_gateway_rest_api.MyDemoAPI.execution_arn}/*/*/*"
 } 
 
-# # # --------------------------------------------------------
-# # # Deploy the API to the "Test" stage
-# # # --------------------------------------------------------
+# --------------------------------------------------------
+# Deploy the API to the "Test" stage
+# --------------------------------------------------------
 resource "aws_api_gateway_deployment" "dnh_api_deployment" {
   depends_on   = [aws_api_gateway_integration.dnh_integration]
 
