@@ -1,9 +1,9 @@
 # --------------------------------------------------------
 # Usage with Cognito User Pool Authorizer
 # --------------------------------------------------------
-# data "aws_cognito_user_pools" "this" {
-#   name = var.cognito_user_pool_name
-# }
+data "aws_cognito_user_pools" "dnh_cog_user_pool_name" {
+  name = var.cognito-user-pool-name
+}
 
 # --------------------------------------------------------
 # API Gateway for the WildRydes application
@@ -57,7 +57,7 @@ resource "aws_api_gateway_method" "dnh_apigateway_method" {
 # --------------------------------------------------------
 # Creates an integration for the API gateway, resource, and the method
 # This is used for both POST 
-# -------------------------------------------------------
+# --------------------------------------------------------
 resource "aws_api_gateway_integration" "dnh_integration" {
   rest_api_id             = aws_api_gateway_rest_api.dnh_wild_rydes_api.id
   resource_id             = aws_api_gateway_resource.dnh_request_ride_resource.id
@@ -67,25 +67,14 @@ resource "aws_api_gateway_integration" "dnh_integration" {
   uri                     = aws_lambda_function.dnh_lambda.invoke_arn
 }
 
-# -----------------------------------------------------------------------------------------------
+# --------------------------------------------------------
 # This is used to set the response for CORS with appropriate response parameters
-# -----------------------------------------------------------------------------------------------
+# --------------------------------------------------------
 resource "aws_api_gateway_integration_response" "dnh_integration_response" {
   rest_api_id = aws_api_gateway_rest_api.dnh_wild_rydes_api.id
   resource_id = aws_api_gateway_resource.dnh_request_ride_resource.id
   http_method = aws_api_gateway_method.dnh_apigateway_method.http_method
   status_code = "200"
-
-  # Transforms the backend JSON response to XML
-  response_templates = {
-    "application/xml" = <<EOF
-#set($inputRoot = $input.path('$'))
-<?xml version="1.0" encoding="UTF-8"?>
-<message>
-    $inputRoot.body
-</message>
-EOF
-  }
 } 
 
 # --------------------------------------------------------
@@ -102,15 +91,15 @@ resource "aws_api_gateway_method_response" "dnh_method_response" {
 # This resource is used to provide (by lambda) permissions to the API gateway
 # --------------------------------------------------------
 resource "aws_lambda_permission" "dnh_api_lambda_permission" {
-  statement_id  = "AllowMyRequestAPIInvoke"
+  statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.dnh_lambda.function_name
   principal     = "apigateway.amazonaws.com"
 
-
   # The /*/*/* part allows invocation from any stage, method and resource path
   # within API Gateway REST API.
-  source_arn =  # "${aws_api_gateway_rest_api.MyDemoAPI.execution_arn}/*/*/*"
+  source_arn = ""
+   
 } 
 
 # --------------------------------------------------------
@@ -118,15 +107,66 @@ resource "aws_lambda_permission" "dnh_api_lambda_permission" {
 # --------------------------------------------------------
 resource "aws_api_gateway_deployment" "dnh_api_deployment" {
   depends_on   = [aws_api_gateway_integration.dnh_integration]
-
   rest_api_id  = aws_api_gateway_rest_api.dnh_wild_rydes_api.id
   stage_name   = "dnh"
-
-  variables    = {
-    "answer" = "42"
-  }
 
   lifecycle {
     create_before_destroy = true
   }
+}
+
+##########################################################
+######################### CORS ###########################
+##########################################################
+
+# --------------------------------------------------------
+# Enables OPTIONS method
+# --------------------------------------------------------
+resource "aws_api_gateway_method" "dnh_options_method_cors" {
+  rest_api_id   = aws_api_gateway_rest_api.dnh_wild_rydes_api.id
+  resource_id   = aws_api_gateway_resource.dnh_request_ride_resource.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+# --------------------------------------------------------
+# Enabling CORS support for mock integrations
+# --------------------------------------------------------
+resource "aws_api_gateway_integration" "dnh_integration_cors" {
+  rest_api_id   = aws_api_gateway_rest_api.dnh_wild_rydes_api.id
+  resource_id   = aws_api_gateway_resource.dnh_request_ride_resource.id
+  http_method   = aws_api_gateway_method.dnh_options_method_cors.http_method
+  type          = "MOCK"
+
+  request_templates = {
+    "application/json" = <<EOF
+      { "statusCode": 200 }
+  EOF
+  }
+}
+
+resource "aws_api_gateway_method_response" "dnh_method_response_cors" {
+  rest_api_id   = aws_api_gateway_rest_api.dnh_wild_rydes_api.id
+  resource_id   = aws_api_gateway_resource.dnh_request_ride_resource.id
+  http_method   = aws_api_gateway_method.dnh_options_method_cors.http_method
+  status_code   = "200"
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+
+  depends_on = [
+    aws_api_gateway_method.dnh_options_method_cors
+  ]
+}
+
+resource "aws_api_gateway_integration_response" "dnh_integration_response_cors" {
+  rest_api_id   = aws_api_gateway_rest_api.dnh_wild_rydes_api.id
+  resource_id   = aws_api_gateway_resource.dnh_request_ride_resource.id
+  http_method   = aws_api_gateway_method.dnh_options_method_cors.http_method
+  status_code   = "200"
+
+  depends_on = [
+    aws_api_gateway_integration.dnh_integration_cors
+  ]
 }

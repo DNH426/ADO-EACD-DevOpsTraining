@@ -19,7 +19,7 @@ module "build_wildRydes" {
   client-function-etag          = "filemd5(../modules/templates/config_for_S3.tpl)"
   bucket-acl                    = "public-read"
 
-  # Lambda
+  # Lambda / IAM
   lambda-runtimes               = "nodejs12.x"
   lambda-function-name          = "dnh-wild-rydes-lambda"
   lambda-role                   = "dnh-lambda-role"
@@ -32,6 +32,6 @@ module "build_wildRydes" {
   cognito-user-pool-name        = "dnh-wild-rydes-pool"
   cognito-user-pool-client      = "dnh-pool-client"
 
-  # API GW
+  # # API GW
 }
 

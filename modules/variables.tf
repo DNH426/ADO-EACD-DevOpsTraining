@@ -17,7 +17,7 @@ variable "functon-content-type" {}
 variable "client-function-etag" {}
 variable "bucket-acl" {}
 
-# Lambda
+# Lambda / IAM
 variable "lambda-runtimes" {}
 variable "lambda-function-name" {}
 variable "lambda-role" {}
@@ -30,4 +30,4 @@ variable "lambda-source-path" {}
 variable "cognito-user-pool-name" {}
 variable "cognito-user-pool-client" {}
 
-# API Gateway
+# # API Gateway

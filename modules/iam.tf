@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-# IAM Role
+# IAM Role which holds lambda permission policies
 # --------------------------------------------------------
 resource "aws_iam_role" "dnh_iam_lambda_role" {
   name = var.lambda-role
@@ -32,7 +32,7 @@ EOF
 }
 
 # --------------------------------------------------------
-# IAM Policy
+# IAM Policy that allows lambda to communicate with DynamoDB
 # --------------------------------------------------------
 resource "aws_iam_role_policy" "dnh_iam_policy_write_access" {
   name = var.lambda-policy
@@ -46,7 +46,8 @@ resource "aws_iam_role_policy" "dnh_iam_policy_write_access" {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": "dynamodb:PutItem",
-            "Resource": "arn:aws:dynamodb:us-east-2:409357033864:table/dnh_Rides"
+            "Resource": "${aws_dynamodb_table.dnh-rides.arn}"          
+            
         }
     ]
   }
@@ -54,7 +55,7 @@ resource "aws_iam_role_policy" "dnh_iam_policy_write_access" {
 }
 
 # --------------------------------------------------------
-# IAM Lambda Policy 
+# IAM Lambda Policy for log groups, streams, and events
 # --------------------------------------------------------
 resource "aws_iam_role_policy_attachment" "AWSLambdaBasicExecutionRole" {
   role       = aws_iam_role.dnh_iam_lambda_role.name
