@@ -46,8 +46,7 @@ resource "aws_iam_role_policy" "dnh_iam_policy_write_access" {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": "dynamodb:PutItem",
-            "Resource": "${aws_dynamodb_table.dnh-rides.arn}"          
-            
+            "Resource":
         }
     ]
   }
